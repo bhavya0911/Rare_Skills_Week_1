@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 event newListing(address indexed maker, bytes32 indexed salt);
+
 event claimed(address indexed maker, bytes32 indexed salt);
 
 struct listing {
