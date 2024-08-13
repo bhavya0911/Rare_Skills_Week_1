@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 event newListing(address indexed maker, bytes32 indexed salt);
 
 event claimed(address indexed maker, bytes32 indexed salt);
+
+event refunded(address indexed maker, address indexed taker, address indexed ERC20Address);
 
 struct listing {
     address maker;
@@ -72,6 +74,7 @@ contract Escrow is ReentrancyGuard {
         );
 
         delete listings[salt];
+        emit refunded(msg.sender, taker, ERC20Address);
 
         (bool success) = IERC20(info.ERC20Address).transfer(msg.sender, info.amountOfCoins);
         require(success, "Unsuccessful coin transfer");

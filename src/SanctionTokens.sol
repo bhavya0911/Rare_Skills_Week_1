@@ -1,11 +1,13 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable2Step.sol";
 
-contract SanctionTokens is ERC20, ERC20Permit, Ownable {
+event sanctionSet(address indexed user, bool indexed value);
+
+contract SanctionTokens is ERC20, ERC20Permit, Ownable2Step {
     mapping(address => bool) private sanctioned;
 
     constructor() ERC20("Test", "TST") ERC20Permit("Test") Ownable(msg.sender) {}
@@ -16,14 +18,7 @@ contract SanctionTokens is ERC20, ERC20Permit, Ownable {
 
     function setSanction(address user, bool value) public onlyOwner {
         sanctioned[user] = value;
-    }
-
-    function mint(address user, uint256 amount) public onlyOwner {
-        _mint(user, amount);
-    }
-
-    function burn(address user, uint256 amount) public onlyOwner {
-        _burn(user, amount);
+        emit sanctionSet(user, value);
     }
 
     function _update(address from, address to, uint256 value) internal override {
