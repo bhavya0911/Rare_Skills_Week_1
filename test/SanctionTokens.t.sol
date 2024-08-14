@@ -45,7 +45,7 @@ contract SanctionTest is Test {
 
         sanctionTokens.mint(sanction, amount);
         assertEq(sanctionTokens.balanceOf(sanction), amount);
-        
+
         vm.expectEmit();
         emit sanctionSet(sanction, true);
         sanctionTokens.setSanction(sanction, true);
